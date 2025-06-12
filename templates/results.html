@@ -9,7 +9,20 @@
 <body class="bg-light p-4">
     <div class="container">
         <h2 class="mb-4">Faculty Work Hours Analysis</h2>
-        {{ table | safe }}
+
+        <form method="get" action="/analyze/faculty" class="form-inline mb-4">
+            <label class="mr-2" for="faculty">Select Faculty:</label>
+            <select name="faculty" id="faculty" class="form-control mr-2" onchange="this.form.submit()">
+                <option value="">-- Choose --</option>
+                {% for name in faculty_list %}
+                    <option value="{{ name }}">{{ name }}</option>
+                {% endfor %}
+            </select>
+        </form>
+
+        {% if table %}
+            {{ table | safe }}
+        {% endif %}
     </div>
 </body>
 </html>

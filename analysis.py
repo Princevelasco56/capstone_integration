@@ -6,14 +6,16 @@ from datetime import datetime, timedelta
 from sklearn.ensemble import IsolationForest
 import matplotlib.pyplot as plt
 import seaborn as sns
-
-def run_analysis():
+def run_analysis(prof_name=None):
     np.random.seed(42)
     faculty_names = ['Prof. Antonio', 'Prof. Miranda', 'Prof. Valdez', 'Prof. Enriquez', 'Prof. Santiago']
     dates = pd.date_range(start="2025-06-01", periods=30, freq='D')
     data = []
 
     for name in faculty_names:
+        if prof_name and name != prof_name:
+            continue  # Skip other names if filtering
+
         for date in dates:
             if date.weekday() >= 5:
                 continue
@@ -38,8 +40,10 @@ def run_analysis():
 
             data.append([name, date.date(), time_in.time(), time_out.time()])
 
-    df = pd.DataFrame(data, columns=['faculty', 'date', 'time_in', 'time_out'])
+    if not data:
+        return pd.DataFrame(columns=['faculty', 'date', 'time_in', 'time_out', 'work_hours', 'anomaly', 'status'])
 
+    df = pd.DataFrame(data, columns=['faculty', 'date', 'time_in', 'time_out'])
     df['time_in'] = pd.to_datetime(df['time_in'].astype(str))
     df['time_out'] = pd.to_datetime(df['time_out'].astype(str))
     df['work_hours'] = (df['time_out'] - df['time_in']).dt.total_seconds() / 3600
