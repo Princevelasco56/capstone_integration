@@ -10,4 +10,4 @@ def analyze():
     return render_template("results.html", table=table_html)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
