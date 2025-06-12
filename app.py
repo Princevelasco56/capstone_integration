@@ -3,6 +3,7 @@ from analysis import run_analysis
 import webbrowser
 import threading
 
+import os
 app = Flask(__name__)
 
 @app.route("/analyze")
@@ -22,5 +23,6 @@ def open_browser():
     webbrowser.open_new("http://127.0.0.1:5000/analyze")
 
 if __name__ == "__main__":
-    threading.Timer(1.25, open_browser).start()
-    app.run(debug=True)
+    # Remove open_browser() for Render deployment
+    # threading.Timer(1.25, open_browser).start()
+    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
