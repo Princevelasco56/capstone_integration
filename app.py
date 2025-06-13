@@ -1,9 +1,13 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from analysis import run_analysis
 import webbrowser
 import threading
 
 app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return redirect(url_for("analyze"))
 
 @app.route("/analyze")
 def analyze():
@@ -21,6 +25,11 @@ def filter_by_faculty():
 def open_browser():
     webbrowser.open_new("http://127.0.0.1:5000/analyze")
 
+#  For development purposes, uncomment the following lines to open the browser automatically
+# if __name__ == "__main__":
+#     threading.Timer(1.25, open_browser).start()
+#     app.run(debug=False)
+
+# For production, use the following lines to run the Flask app without opening the browser automatically
 if __name__ == "__main__":
-    threading.Timer(1.25, open_browser).start()
-    app.run(debug=False)
+    app.run(host="0.0.0.0", port=5000, debug=False)
